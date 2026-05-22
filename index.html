@@ -1,68 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Visualizador de Site</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      gap: 20px;
-      padding: 20px;
+      margin: 20px;
+      background: #f4f4f4;
     }
 
-    textarea, iframe {
-      width: 50%;
-      height: 500px;
-      border: 1px solid #ccc;
+    .controles {
+      margin-bottom: 20px;
     }
 
-    textarea {
-      font-family: monospace;
-      padding: 10px;
+    iframe {
+      display: block;
+      background: white;
+      border: 2px solid #333;
+      margin: auto;
+      transition: 0.3s;
     }
   </style>
 </head>
 <body>
 
-  <textarea id="codigo">
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body {
-      background: #f2f2f2;
-      font-family: Arial;
-      text-align: center;
-    }
-    h1 {
-      color: purple;
-    }
-  </style>
-</head>
-<body>
-  <h1>Meu site</h1>
-  <p>Pré-visualização funcionando!</p>
+  <h1>Visualizador de Site</h1>
 
-  <script>
-    console.log("Olá!");
-  </script>
-</body>
-</html>
-  </textarea>
+  <div class="controles">
+    <input type="file" id="arquivo" accept=".html,.htm">
+
+    <select id="tela">
+      <option value="desktop">Desktop</option>
+      <option value="tablet">Tablet</option>
+      <option value="celular">Celular</option>
+    </select>
+  </div>
 
   <iframe id="preview"></iframe>
 
   <script>
-    const codigo = document.getElementById("codigo");
+    const arquivo = document.getElementById("arquivo");
+    const tela = document.getElementById("tela");
     const preview = document.getElementById("preview");
 
-    function atualizarPreview() {
-      preview.srcdoc = codigo.value;
+    const tamanhos = {
+      desktop: { largura: "1200px", altura: "700px" },
+      tablet: { largura: "768px", altura: "900px" },
+      celular: { largura: "390px", altura: "844px" }
+    };
+
+    function aplicarTamanho() {
+      const tamanho = tamanhos[tela.value];
+      preview.style.width = tamanho.largura;
+      preview.style.height = tamanho.altura;
     }
 
-    codigo.addEventListener("input", atualizarPreview);
-    atualizarPreview();
+    arquivo.addEventListener("change", function () {
+      const file = arquivo.files[0];
+
+      if (!file) return;
+
+      const leitor = new FileReader();
+
+      leitor.onload = function (e) {
+        preview.srcdoc = e.target.result;
+      };
+
+      leitor.readAsText(file);
+    });
+
+    tela.addEventListener("change", aplicarTamanho);
+
+    aplicarTamanho();
   </script>
 
 </body>
