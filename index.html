@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visualizador de Site</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    textarea, iframe {
+      width: 50%;
+      height: 500px;
+      border: 1px solid #ccc;
+    }
+
+    textarea {
+      font-family: monospace;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <textarea id="codigo">
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background: #f2f2f2;
+      font-family: Arial;
+      text-align: center;
+    }
+    h1 {
+      color: purple;
+    }
+  </style>
+</head>
+<body>
+  <h1>Meu site</h1>
+  <p>Pré-visualização funcionando!</p>
+
+  <script>
+    console.log("Olá!");
+  </script>
+</body>
+</html>
+  </textarea>
+
+  <iframe id="preview"></iframe>
+
+  <script>
+    const codigo = document.getElementById("codigo");
+    const preview = document.getElementById("preview");
+
+    function atualizarPreview() {
+      preview.srcdoc = codigo.value;
+    }
+
+    codigo.addEventListener("input", atualizarPreview);
+    atualizarPreview();
+  </script>
+
+</body>
+</html>
