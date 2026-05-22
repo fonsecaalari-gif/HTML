@@ -10,16 +10,19 @@
       background: #f4f4f4;
     }
 
-    .controles {
-      margin-bottom: 20px;
+    textarea {
+      width: 100%;
+      height: 220px;
+      margin-top: 10px;
+      font-family: monospace;
+      padding: 10px;
     }
 
     iframe {
       display: block;
       background: white;
       border: 2px solid #333;
-      margin: auto;
-      transition: 0.3s;
+      margin: 20px auto;
     }
   </style>
 </head>
@@ -27,21 +30,24 @@
 
   <h1>Visualizador de Site</h1>
 
-  <div class="controles">
-    <input type="file" id="arquivo" accept=".html,.htm">
+  <input type="file" id="arquivo" accept=".html,.htm,.txt">
 
-    <select id="tela">
-      <option value="desktop">Desktop</option>
-      <option value="tablet">Tablet</option>
-      <option value="celular">Celular</option>
-    </select>
-  </div>
+  <select id="tela">
+    <option value="desktop">Desktop</option>
+    <option value="tablet">Tablet</option>
+    <option value="celular">Celular</option>
+  </select>
+
+  <textarea id="codigo" placeholder="Cole aqui o código HTML do site..."></textarea>
+
+  <button onclick="visualizar()">Visualizar</button>
 
   <iframe id="preview"></iframe>
 
   <script>
     const arquivo = document.getElementById("arquivo");
     const tela = document.getElementById("tela");
+    const codigo = document.getElementById("codigo");
     const preview = document.getElementById("preview");
 
     const tamanhos = {
@@ -56,15 +62,20 @@
       preview.style.height = tamanho.altura;
     }
 
+    function visualizar() {
+      preview.srcdoc = codigo.value;
+      aplicarTamanho();
+    }
+
     arquivo.addEventListener("change", function () {
       const file = arquivo.files[0];
-
       if (!file) return;
 
       const leitor = new FileReader();
 
       leitor.onload = function (e) {
-        preview.srcdoc = e.target.result;
+        codigo.value = e.target.result;
+        visualizar();
       };
 
       leitor.readAsText(file);
